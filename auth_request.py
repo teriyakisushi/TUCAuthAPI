@@ -76,12 +76,12 @@ class TJCUAuth:
             user: 学号
             pwd: 密码
         Returns:
-            dict: 登录成功返回的页面信息
+            str: 登录成功返回的页面信息
         '''
 
         salt, lt = self.get_salt()
         if not salt or not lt:
-            return False
+            return 'Salt or lt is None!'
 
         if not user and not pwd:
             user = self.user
@@ -113,7 +113,7 @@ class TJCUAuth:
 
         except Exception as e:
             logger.error(f'Error: {e}')
-            return False
+            return 'something error'
 
     def power_login(self, user: str = '', pwd: str = '', target_url: str = '') -> str:
         '''
@@ -124,7 +124,7 @@ class TJCUAuth:
             pwd: 密码
             target_url: 需要访问的服务地址
         Returns:
-            dict: 登录成功返回的页面信息
+            str: 登录成功返回的页面信息
         '''
         from playwright.sync_api import sync_playwright
 
@@ -137,7 +137,7 @@ class TJCUAuth:
 
         url = self.auth_url + '?service=' + target_url
 
-        info = f'Login User:{user}, Password:{pwd}, Target URL:{url}'
+        info = f'Now using Login-User:{user}, Password:{pwd}, Target URL:{url}'
         logger.info(info)
 
         try:
@@ -154,17 +154,14 @@ class TJCUAuth:
                     page.fill('input[id="password"]', pwd)
                     time.sleep(1)
                     page.click('button[type="submit"]')
-                    # page.wait_for_load_state('load')
+
                     page.goto(target_url)
                     page.wait_for_load_state('load')
-                    # Waiting for the page to render
-                    # page.wait_for_timeout(1500)
-                    # page.wait_for_load_state('load')
 
                     # Check if login was successful
                     if "统一身份认证" in page.title():
-                        logger.error("Login failed, still on login page.")
-                        return "Login failed, still on login page."
+                        logger.error("登录失败，请检查用户名和密码是否正确")
+                        return "登录失败，请检查用户名和密码是否正确"
 
                 # Get the page content
                 logger.info("Getting page content")

@@ -2,48 +2,52 @@
 天商校园验证服务API
 </h2>
 
-## Description
+## 📖项目简介
 
-本API提供天商“统一身份认证”服务的接口，用于快捷登录操作。
+本 API 用于天商 **“统一身份认证”** 系统的快捷登录以获取目标服务的响应内容。
 
-## Installation
-首先确保你的Python版本位于`3.8+`，然后执行以下命令安装依赖：
+## 🚀安装依赖
+首先确保你的Python版本为`3.8+` ，在项目目录下执行以下命令：
 
 ```shell
 pip install -r requirements.txt
 playwright install
 ```
 
-`playwright`用于等待页面渲染完成以获取内容，若你需要访问的 `target_url` 为静态页面可以不安装喵
+## 📚使用方法
 
-## Usage
+`auth_request.py` 提供了两种登录方法：
+- `login()`: 获取登录后返回的响应页面，适合静态资源
+- `power_login()`: 获取渲染完成后的登录页面内容，如 **URP教务系统**
 
-`auth_request.py` 提供了两种快捷登录方法
-- `login()`: 获取登录后返回的页面响应，适合静态页面
-- `power_login()`: 使用`playwright`获取登录后的页面内容，适合动态页面，比如 **URP教务系统**
 
-创建该实例需要如下参数:
-- `usr`: 学号
+
+创建登录实例需要如下参数:
+- `user`: 学号
 - `pwd`: 密码
-- `target_url`: 目标页面的URL
+- `target_url`: 目标页面URL
 
-**使用方法：**
+**示例：**
 
 ```python
-# 创建AuthRequest对象
+from auth_request import TJCUAuth
+
+# 创建登录实例
 URP = TJCUAuth(
-    usr='你的学号',
-    pwd='你的密码',
-    target_url='目标页面的URL'
+    usr='114514',
+    pwd='1919810',
+    target_url='http://stu.j.tjcu.edu.cn/'
 )
 res = URP.login()
 print(res)
 ```
 
-## Demo
 
-本仓库提供了一个简单的Demo，用于演示如何使用该API，
-修改`demo.py`的`usr`和`pwd`为你的学号和密码，然后使用如下命令运行：
+## 🎦Demo
+
+本仓库提供了一个简单的Demo程序，演示了如何利用本API获取天商URP教务系统的姓名和绩点信息。
+
+修改`demo.py`的`user`和`pwd`为你的学号和密码，然后使用如下命令运行：
 
 ```shell
 python demo.py
@@ -56,8 +60,8 @@ python demo.py
 你的绩点是: 4.99 哦！
 ```
 
-## TO DO
+## 📝TODO 
 
-- [ ] 添加潜在的Captha验证
+- [ ] 添加潜在的Captcha认证登录
 - [ ] 更多的登录场景
 - [ ] 更多&更快捷的信息查询方法

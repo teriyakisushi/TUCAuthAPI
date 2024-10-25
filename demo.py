@@ -10,7 +10,7 @@ def get_urp_info() -> str:
     try:
         files = [os.path.join(request_dir, f) for f in os.listdir(request_dir) if f.endswith('.txt')]
         if not files:
-            raise FileNotFoundError('没有请求文件喵')
+            raise FileNotFoundError('没有找到请求的文件喵')
         latest_file = max(files, key=os.path.getctime)
 
         with open(latest_file, 'r', encoding='UTF-8') as f:
@@ -42,11 +42,11 @@ def save_request_text(res_str: str) -> None:
 
 if __name__ == '__main__':
 
-    usr = '20229988'
-    pwd = '123456'
+    user = '114514'
+    pwd = '1919810'
 
     URP = TJCUAuth(
-        user=usr,
+        user=user,
         pwd=pwd,
         target_url='http://stu.j.tjcu.edu.cn/'
     )
