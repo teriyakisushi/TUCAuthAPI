@@ -2,11 +2,11 @@
 天商校园验证服务API
 </h2>
 
-### Description
+## Description
 
 本API提供天商“统一身份认证”服务的接口，用于快捷登录操作。
 
-### Installation
+## Installation
 首先确保你的Python版本位于`3.8+`，然后执行以下命令安装依赖：
 
 ```shell
@@ -16,7 +16,7 @@ playwright install
 
 `playwright`用于等待页面渲染完成以获取内容，若你需要访问的 `target_url` 为静态页面可以不安装喵
 
-### Usage
+## Usage
 
 `auth_request.py` 提供了两种快捷登录方法
 - `login()`: 获取登录后返回的页面响应，适合静态页面
@@ -40,7 +40,7 @@ res = URP.login()
 print(res)
 ```
 
-### Demo
+## Demo
 
 本仓库提供了一个简单的Demo，用于演示如何使用该API，
 修改`demo.py`的`usr`和`pwd`为你的学号和密码，然后使用如下命令运行：
@@ -56,7 +56,7 @@ python demo.py
 你的绩点是: 4.99 哦！
 ```
 
-### TO DO
+## TO DO
 
 - [ ] 添加潜在的Captha验证
 - [ ] 更多的登录场景
