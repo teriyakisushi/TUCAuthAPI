@@ -23,8 +23,8 @@ playwright install
 - `power_login()`: 使用`playwright`获取登录后的页面内容，适合动态页面，比如 **URP教务系统**
 
 创建该实例需要如下参数:
-- `user`: 学号
-- `password`: 密码
+- `usr`: 学号
+- `pwd`: 密码
 - `target_url`: 目标页面的URL
 
 **使用方法：**
