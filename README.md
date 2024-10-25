@@ -4,10 +4,10 @@
 
 ### Description
 
-该API提供了天商“统一身份认证”服务的接口，用于快捷登录操作。
+本API提供天商“统一身份认证”服务的接口，用于快捷登录操作。
 
 ### Installation
-首先确保你的Python版本位于3.8+，然后执行以下命令安装依赖：
+首先确保你的Python版本位于`3.8+`，然后执行以下命令安装依赖：
 
 ```shell
 pip install -r requirements.txt
@@ -27,7 +27,7 @@ playwright install
 - `password`: 密码
 - `target_url`: 目标页面的URL
 
-使用方法：
+**使用方法：**
 
 ```python
 # 创建AuthRequest对象
@@ -36,7 +36,7 @@ URP = TJCUAuth(
     pwd='你的密码',
     target_url='目标页面的URL'
 )
-res = URP.power_login()
+res = URP.login()
 print(res)
 ```
 
