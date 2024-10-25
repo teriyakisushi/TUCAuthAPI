@@ -14,7 +14,7 @@ pip install -r requirements.txt
 playwright install
 ```
 
-`playwright`用于等待目标页面渲染完成，以便获取页面内容，若你需要访问的 `target_url` 为静态页面，可以不安装。
+`playwright`用于等待页面渲染完成以获取内容，若你需要访问的 `target_url` 为静态页面可以不安装喵
 
 ### Usage
 
