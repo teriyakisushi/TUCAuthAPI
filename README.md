@@ -46,7 +46,7 @@ from auth_request import TJCUAuth
 
 # 创建登录实例
 URP = TJCUAuth(
-    usr='114514',
+    user='114514',
     pwd='1919810',
     target_url='http://stu.j.tjcu.edu.cn/'
 )
