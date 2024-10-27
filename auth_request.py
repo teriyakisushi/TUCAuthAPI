@@ -4,6 +4,9 @@ import execjs
 import requests
 from loguru import logger
 
+headers = {}
+data = {}
+
 
 class TJCUAuth:
     def __init__(self, user: str, pwd: str, target_url: str) -> None:
@@ -17,6 +20,7 @@ class TJCUAuth:
         self.service_url = target_url
         self.auth_url = 'http://authserver.tjcu.edu.cn/authserver/login'
         self.Referer = self.auth_url + '?service=' + target_url
+        self.login_status = False
 
         self.UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
         self.encrypt = execjs.compile(open('encrypt.js', 'r', encoding='utf-8').read())
@@ -78,10 +82,12 @@ class TJCUAuth:
         Returns:
             str: 登录成功返回的页面信息
         '''
+        global headers, data
+        return_info = ''
 
         salt, lt = self.get_salt()
         if not salt or not lt:
-            return 'Salt or lt is None!'
+            return_info = 'Salt or lt is None'
 
         if not user and not pwd:
             user = self.user
@@ -109,11 +115,19 @@ class TJCUAuth:
                 data=data
             )
             # logger.warning(res.text)
-            return res.text
+            if '统一身份认证' in res.text:
+                logger.error("登录失败，请检查用户名和密码是否正确")
+                return_info = "登录失败，请检查用户名和密码是否正确"
+
+            logger.success("Login successfully!")
+            self.login_status = True
+            return_info = res.text
 
         except Exception as e:
             logger.error(f'Error: {e}')
-            return 'something error'
+            return_info = 'something error'
+
+        return return_info
 
     def power_login(self, user: str = '', pwd: str = '', target_url: str = '') -> str:
         '''
@@ -163,12 +177,43 @@ class TJCUAuth:
                         logger.error("登录失败，请检查用户名和密码是否正确")
                         return "登录失败，请检查用户名和密码是否正确"
 
+                    # Don't forget to set the login status = =
+                    self.login_status = True
+
                 # Get the page content
                 logger.info("Getting page content")
                 content = page.content()
+
+                # Export cookies from browser
+                cookies = context.cookies()
                 browser.close()
+
+                # Import cookies to self.requests
+                for cookie in cookies:
+                    self.requests.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'])
+
                 return content
 
         except Exception as e:
             logger.error(f'Error: {e}')
             return 'something error'
+
+    def schedule_provider(self):
+        if not self.login_status:
+            logger.error('Please login first!')
+            return 'Please login first!'
+        try:
+            course_res = self.requests.get(
+                url='http://stu.j.tjcu.edu.cn/student/courseSelect/thisSemesterCurriculum/ajaxStudentSchedule/curr/callback',
+                cookies=self.requests.cookies
+            )
+            course_data = course_res.text
+        except Exception as e:
+            logger.error(f'Error: {e}')
+            course_data = 'something error'
+
+        return course_data
+
+    def clean_cookies(self):
+        self.requests.cookies.clear()
+        logger.success('Clean the cookies successfully!')

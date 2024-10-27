@@ -9,7 +9,7 @@ class Tools:
     @staticmethod
     def save_response_text(res_txt: str = '', file_name: str = '', save_path: str = '') -> None:
         '''
-        将
+        保存请求文本到本地
 
         Args:
             res_txt: 响应文本
@@ -30,34 +30,59 @@ class Tools:
             print(f'Save the request text to {file_path} successfully!')
 
     @staticmethod
-    def urp_get_name(res_str: str = '', res_file_path: str = '') -> str:
+    def urp_get_name(source: str, is_file: bool = False) -> str:
         '''
         获取登录后的URP教务系统的用户姓名
         不能同时传入两个参数，请选择其中一个传入
 
         Args:
-            res_str: str: 响应文本
-            res_file_path: str: 响应文本的文件路径
+            source: 响应文本或响应文件路径
 
         Returns:
             str: 用户姓名
         '''
         user_name = ''
 
-        if not res_str or not res_file_path:
+        if not source:
             raise ValueError('请求文本或文件路径不能为空！')
 
-        if res_str and res_file_path:
-            raise ValueError('不能同时传入两个参数，请选择其中一个传入!')
+        if is_file:
+            with open(source, 'r', encoding='UTF-8') as f:
+                source = f.read()
 
-        if res_str:
-            name = re.search(r'<span class="user-info">\s*<small>欢迎您，</small>\s*(.*?)\s*</span>', res_str)
+        name = re.search(r'<span class="user-info">\s*<small>欢迎您，</small>\s*(.*?)\s*</span>', source)
+        if name:
             user_name = name.group(1)
-
-        if res_file_path:
-            with open(res_file_path, 'r', encoding='UTF-8') as f:
-                res_str = f.read()
-            name = re.search(r'<span class="user-info">\s*<small>欢迎您，</small>\s*(.*?)\s*</span>', res_str)
-            user_name = name.group(1)
+        else:
+            raise ValueError('未找到用户姓名！')
 
         return user_name
+
+    @staticmethod
+    def urp_get_gpa(source: str, is_file: bool = False) -> float:
+        '''
+        获取登录后的URP教务系统的用户绩点
+        不能同时传入两个参数，请选择其中一个传入
+
+        Args:
+            source: 响应文本或响应文件路径
+
+        Returns:
+            float: 用户绩点
+        '''
+        user_gpa = 0.0
+
+        if not source:
+            raise ValueError('请求文本或文件路径不能为空！')
+
+        if is_file:
+            with open(source, 'r', encoding='UTF-8') as f:
+                source = f.read()
+
+        gpa = re.search(r'<span class="infobox-data-number" id="gpa">(.*?)</span>', source)
+        if gpa:
+            user_gpa = float(gpa.group(1))
+        else:
+            raise ValueError('未能找到用户绩点')
+
+        return user_gpa
