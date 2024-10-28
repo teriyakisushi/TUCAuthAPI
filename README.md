@@ -6,16 +6,12 @@
 
 ## 目录
 
-
-- [目录](#目录)
 - [📖项目简介](#项目简介)
   - [⭐Features](#features)
 - [🚀安装依赖](#安装依赖)
 - [📚使用方法](#使用方法)
 - [🎦Demo](#demo)
-- [📝TODO](#todo)
-- [📜 Update Log](#-update-log)
-  - [2024-10-27](#2024-10-27)
+- [📝Todo](#todo)
 
 
 
@@ -83,20 +79,10 @@ python demo.py
 
 ## 📝TODO 
 
+- [ ] More lang support
 - [ ] 添加潜在的Captcha认证登录
 - [ ] 更多的登录场景
 - [ ] 更多&更快捷的信息查询方法
 
-## 📜 Update Log
-
-### 2024-10-27
-
-- `auth_request.py`
-    - `power_login()`方法可以保持登录状态啦，使用后再调用`self.requests.get`可以免cookies参数惹
-    - `clean_cookies()`：清除cookies
-
-- `tools.py`
-    - 本地工具: `save_response_text()`，保存响应文本到本地
-    - 查询静态方法：如`urp_get_gpa()`和`urp_get_name()` ，支持读取响应文本和本地文件
 
 如果你觉得这个项目对你有帮助，欢迎点个Star⭐️，你的支持是我最大的动力喵~
