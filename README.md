@@ -80,7 +80,6 @@ python demo.py
 ## 📝Todo
 
 - [x] URP教务系统
-- [ ] More lang support
 - [ ] 添加潜在的Captcha认证登录
 - [ ] 更多的登录场景
 - [ ] 更多&更快捷的信息查询方法
@@ -88,4 +87,4 @@ python demo.py
 - [ ] More lang support
 
 
-如果你觉得这个项目对你有帮助， 欢迎点个Star⭐️，你的支持是我最大的动力喵~
+如果这个项目对你有帮助， 欢迎点个Star⭐️，你的支持是我最大的动力喵~
