@@ -1,40 +1,68 @@
-import os
-from datetime import datetime
-from auth_request import TJCUAuth
-from tools import Tools
+import asyncio
+from Auth.auth_request import TJCUAuth
+from Utils.tools import Tools
+from URP.urp_api import URP
 
 
-def save_request_text(res_str: str) -> None:
-    current_time = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+async def get_my_course(Instance: TJCUAuth):
+    if not Instance.login_status:
+        # 登录教务系统
+        Instance.power_login()
 
-    # Make sure directory exists ^_^
-    os.makedirs('./Request', exist_ok=True)
+    # 实例化一个URP对象
+    MyURP = URP()
 
-    # Save the request text to local
-    file_path = f'./Request/{current_time}.txt'
-    with open(file_path, 'w', encoding='UTF-8') as f:
-        f.write(res_str)
-        print(f'Save the request text to {file_path} successfully!')
+    # 获取课程信息
+    course_data = await MyURP.urp_get_courseSelect(Instance)
+    course_time = await MyURP.urp_get_courseTime(Instance)
 
-
-if __name__ == '__main__':
-
-    user = '114514'
-    pwd = '1919810'
-
-    URP = TJCUAuth(
-        user=user,
-        pwd=pwd,
-        target_url='http://stu.j.tjcu.edu.cn/'
+    # 将课程信息保存到本地
+    Tools.save_response_text(
+        course_data,
+        'course_data.json',
+        './Response'
     )
-    res = URP.power_login()
+
+    # 将课程时间保存到本地
+    Tools.save_response_text(
+        course_time,
+        'course_time.json',
+        './Response'
+    )
+
+
+def get_my_info(Instance: TJCUAuth):
+
+    res = Instance.power_login()
 
     # 将响应文本保存到本地
     file_name = 'login_res.txt'
     Tools.save_response_text(res, file_name, './Response')
 
     # 读取响应文本，获取用户姓名和绩点
-    name = Tools.urp_get_name('./Response/login_res.txt', is_file=True)
-    gpa = Tools.urp_get_gpa('./Response/login_res.txt', is_file=True)
+    name = URP.urp_get_name('./Response/login_res.txt', is_file=True)
+    gpa = URP.urp_get_gpa('./Response/login_res.txt', is_file=True)
 
     print(f'请问是{name}同学吗?\n你的绩点是{gpa}哦！')
+
+
+def main():
+
+    user = ''
+    pwd = ''
+
+    # 实例化一个Auth对象
+    SleepFox = TJCUAuth(
+        user=user,
+        pwd=pwd,
+        target_url='http://stu.j.tjcu.edu.cn/'
+    )
+
+    # 获取你的姓名和绩点
+    print(get_my_info(SleepFox))
+
+    # 获取你本学期的课程信息
+    asyncio.run(get_my_course(SleepFox))
+
+
+main()

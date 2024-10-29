@@ -13,9 +13,7 @@
 - [🚀安装依赖](#安装依赖)
 - [📚使用方法](#使用方法)
 - [🎦Demo](#demo)
-- [📝TODO](#todo)
-- [📜 Update Log](#-update-log)
-  - [2024-10-27](#2024-10-27)
+- [📝Todo](#todo)
 
 
 
@@ -40,7 +38,6 @@ playwright install
 `auth_request.py` 提供了两种登录方法：
 - `login()`: 获取登录后返回的响应页面，适合静态资源
 - `power_login()`: 获取渲染完成后的登录页面内容，如 **URP教务系统**
-
 
 
 创建登录实例需要如下参数:
@@ -81,22 +78,14 @@ python demo.py
 你的绩点是: 4.99 哦！
 ```
 
-## 📝TODO 
+## 📝Todo
 
+- [x] URP教务系统
 - [ ] 添加潜在的Captcha认证登录
 - [ ] 更多的登录场景
 - [ ] 更多&更快捷的信息查询方法
+- [ ] Backend support
+- [ ] More lang support
 
-## 📜 Update Log
-
-### 2024-10-27
-
-- `auth_request.py`
-    - `power_login()`方法可以保持登录状态啦，使用后再调用`self.requests.get`可以免cookies参数惹
-    - `clean_cookies()`：清除cookies
-
-- `tools.py`
-    - 本地工具: `save_response_text()`，保存响应文本到本地
-    - 查询静态方法：如`urp_get_gpa()`和`urp_get_name()` ，支持读取响应文本和本地文件
 
 如果你觉得这个项目对你有帮助，欢迎点个Star⭐️，你的支持是我最大的动力喵~

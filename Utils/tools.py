@@ -1,5 +1,5 @@
 import os
-import re
+# import json
 
 
 class Tools:
@@ -30,19 +30,17 @@ class Tools:
             print(f'Save the request text to {file_path} successfully!')
 
     @staticmethod
-    def urp_get_name(source: str, is_file: bool = False) -> str:
+    def urp_courseInfo_parse(source: str, is_file: bool = False) -> dict:
         '''
-        获取登录后的URP教务系统的用户姓名
+        解析课程表的json数据
         不能同时传入两个参数，请选择其中一个传入
 
         Args:
             source: 响应文本或响应文件路径
 
         Returns:
-            str: 用户姓名
+            dict: 课程表的json数据
         '''
-        user_name = ''
-
         if not source:
             raise ValueError('请求文本或文件路径不能为空！')
 
@@ -50,39 +48,4 @@ class Tools:
             with open(source, 'r', encoding='UTF-8') as f:
                 source = f.read()
 
-        name = re.search(r'<span class="user-info">\s*<small>欢迎您，</small>\s*(.*?)\s*</span>', source)
-        if name:
-            user_name = name.group(1)
-        else:
-            raise ValueError('未找到用户姓名！')
-
-        return user_name
-
-    @staticmethod
-    def urp_get_gpa(source: str, is_file: bool = False) -> float:
-        '''
-        获取登录后的URP教务系统的用户绩点
-        不能同时传入两个参数，请选择其中一个传入
-
-        Args:
-            source: 响应文本或响应文件路径
-
-        Returns:
-            float: 用户绩点
-        '''
-        user_gpa = 0.0
-
-        if not source:
-            raise ValueError('请求文本或文件路径不能为空！')
-
-        if is_file:
-            with open(source, 'r', encoding='UTF-8') as f:
-                source = f.read()
-
-        gpa = re.search(r'<span class="infobox-data-number" id="gpa">(.*?)</span>', source)
-        if gpa:
-            user_gpa = float(gpa.group(1))
-        else:
-            raise ValueError('未能找到用户绩点')
-
-        return user_gpa
+        ...

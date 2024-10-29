@@ -1,8 +1,11 @@
 import re
+import os
 import time
+import json
 import execjs
 import requests
 from loguru import logger
+from Utils.tools import Tools
 
 headers = {}
 data = {}
@@ -23,7 +26,9 @@ class TJCUAuth:
         self.login_status = False
 
         self.UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-        self.encrypt = execjs.compile(open('encrypt.js', 'r', encoding='utf-8').read())
+
+        encrypt_js_path = os.path.join(os.path.dirname(__file__), 'encrypt.js')
+        self.encrypt = execjs.compile(open(encrypt_js_path, 'r', encoding='utf-8').read())
 
     def get_req(self, target_url: str) -> None:
         '''
@@ -200,19 +205,27 @@ class TJCUAuth:
 
     def schedule_provider(self):
         if not self.login_status:
-            logger.error('Please login first!')
-            return 'Please login first!'
-        try:
-            course_res = self.requests.get(
-                url='http://stu.j.tjcu.edu.cn/student/courseSelect/thisSemesterCurriculum/ajaxStudentSchedule/curr/callback',
-                cookies=self.requests.cookies
-            )
-            course_data = course_res.text
-        except Exception as e:
-            logger.error(f'Error: {e}')
-            course_data = 'something error'
+            logger.error('请先登录！')
+            raise ValueError('请先登录！')
 
-        return course_data
+        res = self.requests.get(
+            'http://stu.j.tjcu.edu.cn/student/courseSelect/thisSemesterCurriculum/index',
+        )
+        Tools.save_response_text(res.text, 'schedule_response.txt', './Response')
+        time.sleep(0.1)
+
+        plan_code = Tools.urp_find_semester_plancode('./Response/schedule_response.txt', is_file=True)
+
+        url = f'http://stu.j.tjcu.edu.cn/student/courseSelect/thisSemesterCurriculum/{plan_code}/ajaxStudentSchedule/curr/callback'
+
+        res = self.requests.get(
+            url=url,
+            headers={
+                'User-Agent': self.UA,
+                'Referer': 'http://stu.j.tjcu.edu.cn/student/courseSelect/thisSemesterCurriculum/index'
+            }
+        )
+        return res.text
 
     def clean_cookies(self):
         self.requests.cookies.clear()
