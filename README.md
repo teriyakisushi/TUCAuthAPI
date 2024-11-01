@@ -13,6 +13,7 @@
 - [📚使用方法](#使用方法)
 - [🎦Demo](#demo)
 - [📝Todo](#todo)
+- [Update Log](#update-log)
 
 
 
@@ -80,11 +81,15 @@ python demo.py
 ## 📝Todo
 
 - [x] URP教务系统
-- [ ] 添加潜在的Captcha认证登录
-- [ ] 更多的登录场景
-- [ ] 更多&更快捷的信息查询方法
+- [x] 解析课程表，详细看 `Update Log`
+- [ ] 潜在的Captcha认证
+- [ ] PEExam系统
 - [ ] Backend support
 - [ ] More lang support
 
+## Update Log
+
+[**点我查看详细**](update_log.md)
 
 如果这个项目对你有帮助， 欢迎点个Star⭐️，你的支持是我最大的动力喵~
+

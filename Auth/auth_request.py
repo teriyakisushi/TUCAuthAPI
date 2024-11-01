@@ -1,7 +1,6 @@
 import re
 import os
 import time
-import json
 import execjs
 import requests
 from loguru import logger

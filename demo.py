@@ -2,6 +2,7 @@ import asyncio
 from Auth.auth_request import TJCUAuth
 from Utils.tools import Tools
 from URP.urp_api import URP
+from settings import user, pwd
 
 
 async def get_my_course(Instance: TJCUAuth):
@@ -14,19 +15,11 @@ async def get_my_course(Instance: TJCUAuth):
 
     # 获取课程信息
     course_data = await MyURP.urp_get_courseSelect(Instance)
-    course_time = await MyURP.urp_get_courseTime(Instance)
 
     # 将课程信息保存到本地
     Tools.save_response_text(
         course_data,
         'course_data.json',
-        './Response'
-    )
-
-    # 将课程时间保存到本地
-    Tools.save_response_text(
-        course_time,
-        'course_time.json',
         './Response'
     )
 
@@ -47,9 +40,6 @@ def get_my_info(Instance: TJCUAuth):
 
 
 def main():
-
-    user = ''
-    pwd = ''
 
     # 实例化一个Auth对象
     SleepFox = TJCUAuth(

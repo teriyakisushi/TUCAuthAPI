@@ -18,3 +18,12 @@ response_path = './Response'
 login_res = 'login_res.txt'
 courseSelect_res = 'courseInfo.json'
 peexam_res = 'peexam.json'
+
+# Course Parse
+
+'''
+课程表数据解析方法: 0-合并节次, 显示开始到结束的时间:1-分开节次，显示每个节次的开始时间和结束时间,
+如果你希望在Console中打印课程信息, 推荐设为0,
+如果你希望在后端处理课程信息, 推荐设为1
+'''
+course_timeDetail_combine = 0

@@ -33,7 +33,6 @@ class Tools:
     def urp_courseInfo_parse(source: str, is_file: bool = False) -> dict:
         '''
         解析课程表的json数据
-        不能同时传入两个参数，请选择其中一个传入
 
         Args:
             source: 响应文本或响应文件路径
