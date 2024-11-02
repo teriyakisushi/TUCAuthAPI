@@ -6,7 +6,7 @@
 ```python
 def get_req(self,targert_url: str) -> None:
     '''
-    No Description
+    获取请求，已弃用
     '''
 ```
 
