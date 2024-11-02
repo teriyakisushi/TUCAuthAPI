@@ -1,3 +1,4 @@
+import re
 import json
 from settings import course_timeDetail_combine
 
@@ -141,3 +142,66 @@ class CourseList:
 
     def toString(self):
         return json.dumps([course.to_dict() for course in self.course_list], ensure_ascii=False, indent=4)
+
+
+class CodeParser:
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def urp_find_semester_plancode(source: str, is_file: bool = False) -> str:
+        '''
+        获取当前学期的课表地址
+        传入参数为文件路径时，is_file参数必须为True
+
+        Args:
+            source: 响应文本或响应文件路径
+
+        Returns:
+            str: 当前学期的课表地址
+        '''
+        plan_code = ''
+
+        if not source:
+            raise ValueError('请求文本或文件路径不能为空！')
+
+        if is_file:
+            with open(source, 'r', encoding='UTF-8') as f:
+                source = f.read()
+
+        match = re.search(r'/student/courseSelect/thisSemesterCurriculum/(\w+)/ajaxStudentSchedule', source)
+        if match:
+            plan_code = match.group(1)
+        else:
+            raise ValueError('未找到课表地址！')
+
+        return plan_code
+
+    @staticmethod
+    def urp_find_unpassexam_code(source: str, is_file: bool = False) -> str:
+        '''
+        获取未通过考试的课程地址
+        传入参数为文件路径时, is_file参数必须为True
+
+        Args:
+            source: 响应文本或响应文件路径
+
+        Returns:
+            str: 未通过考试的课程地址
+        '''
+        code = ''
+
+        if not source:
+            raise ValueError('请求文本或文件路径不能为空！')
+
+        if is_file:
+            with open(source, 'r', encoding='UTF-8') as f:
+                source = f.read()
+
+        match = re.search(r'/student/integratedQuery/scoreQuery/(\w+)/unpassed/scores/callback', source)
+        if match:
+            code = match.group(1)
+        else:
+            raise ValueError('未找到未通过考试的课程地址！')
+
+        return code

@@ -4,7 +4,7 @@
   - 使用示例（请先用`urp_get_courseSelect()`获取选课信息）
 
 ```python
-from Utils.parse import CourseList
+from URP.CourseParse import CourseList
 
 '''
 创建你所选课程的对象，CourseList将读取响应文件的每一门课程并将其转换为一个课程对象，你可以方便的查看其属性值
