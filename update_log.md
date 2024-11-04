@@ -1,3 +1,7 @@
+- **2024.11.4**:
+  - New class: `Exam`, used to get exam information, including passed and unpassed exams
+  - Remove `CourseList.to_dict()` and `Course.to_dict()`, this method now herited from `BaseModel` method
+
 - **2024.11.2**:
   - 新增方法: `urp_get_unpassed_course()`, 用于获取未通过的课程信息，`parse`方法尚未实现 
 

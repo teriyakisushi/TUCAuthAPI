@@ -3,7 +3,23 @@ import json
 from settings import course_timeDetail_combine
 
 
+class BaseModel:
+    def to_dict(self):
+        result = {}
+        for key, value in self.__dict__.items():
+            if isinstance(value, list):
+                result[key] = [item.to_dict() if isinstance(item, BaseModel) else item for item in value]
+            elif isinstance(value, BaseModel):
+                result[key] = value.to_dict()
+            else:
+                result[key] = value
+        return result
+
+
 class Timetable:
+    '''
+    课程时间表
+    '''
     def __init__(self):
         self.course_time_dict = {
             '1': {'startTime': '08:00', 'endTime': '08:45'},
@@ -29,7 +45,7 @@ class Timetable:
         )
 
 
-class CourseDetail:
+class CourseDetail(BaseModel):
     def __init__(self, detail_data, timetable, course_timeDetail_combine):
         self.day = detail_data.get('classDay', '')
         self.building = detail_data.get('teachingBuildingName', '')
@@ -63,18 +79,8 @@ class CourseDetail:
                         "endTime": time_info['endTime']
                     })
 
-    def to_dict(self):
-        return {
-            "day": self.day,
-            "building": self.building,
-            "classroom": self.classroom,
-            "sessionStart": self.sessionStart,
-            "sessionContinue": self.sessionContinue,
-            "timeDetail": self.timeDetail
-        }
 
-
-class Course:
+class Course(BaseModel):
     def __init__(self, course_info, timetable, course_timeDetail_combine):
         self.Name = course_info.get('courseName', '')
         self.Code = course_info.get('id', {}).get('coureNumber', '')
@@ -97,17 +103,6 @@ class Course:
         else:
             # 当 timeAndPlaceList 为空时，不处理课程详情
             self.Week = ''
-
-    def to_dict(self):
-        return {
-            "Name": self.Name,
-            "Code": self.Code,
-            "Property": self.Property,
-            "Teacher": self.Teacher,
-            "Unit": self.Unit,
-            "Week": self.Week,
-            "Detail": [detail.to_dict() for detail in self.Detail]
-        }
 
 
 class CourseList:
@@ -142,6 +137,14 @@ class CourseList:
 
     def toString(self):
         return json.dumps([course.to_dict() for course in self.course_list], ensure_ascii=False, indent=4)
+
+
+class Exam:
+    '''
+    考试信息，含通过和未通过课程
+    '''
+    def __init__(self, exam_info: str):
+        ...
 
 
 class CodeParser:
