@@ -115,9 +115,9 @@ Object Properties:
 | Detail->classroom        | String | 教室          |
 | Detail->sessionStart     | Int    | 开始节次      |
 | Detail->sessionContinue  | Int    | 持续节次      |
-| timeDetial->sessionIndex | Int    | 节次          |
-| timeDetial->startTime    | String | 开始时间      |
-| timeDetial->endTime      | String | 结束时间      |
+| timeDetail->sessionIndex | Int    | 节次          |
+| timeDetail->startTime    | String | 开始时间      |
+| timeDetail->endTime      | String | 结束时间      |
 
 - **2024.10.28**
     - 新增两个方法`urp_get_courseSelect`和`urp_get_timeTable`，分别用于获取选课信息和时间表
