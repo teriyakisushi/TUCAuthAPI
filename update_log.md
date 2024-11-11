@@ -23,15 +23,15 @@ MyCourse = CourseList(
 
 for course in MyCourse:
     print("找到课程如下：")
-    print(f"课程名称：{e.Name}")
-    print(f"课程代码：{e.Code}")
-    print(f"课程性质：{e.Property}")
-    print(f"任课教师：{e.Teacher}")
-    print(f"上课周：{e.Week}")
-    print(f"学分：{e.Unit}")
+    print(f"课程名称：{course.Name}")
+    print(f"课程代码：{course.Code}")
+    print(f"课程性质：{course.Property}")
+    print(f"任课教师：{course.Teacher}")
+    print(f"上课周：{course.Week}")
+    print(f"学分：{course.Unit}")
 
-    if e.Detail:
-        for detail in e.Detail:
+    if course.Detail:
+        for detail in course.Detail:
             print(f"上课日：星期{detail.day}")
             print(f"教学楼：{detail.building}")
             print(f"教室：{detail.classroom}")
