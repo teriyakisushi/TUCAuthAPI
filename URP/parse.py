@@ -47,9 +47,14 @@ class Timetable:
 
 class CourseDetail(BaseModel):
     def __init__(self, detail_data, timetable, course_timeDetail_combine):
+
+        # 星期几
         self.day = detail_data.get('classDay', '')
+        # 教学楼
         self.building = detail_data.get('teachingBuildingName', '')
+        # 教室
         self.classroom = detail_data.get('classroomName', '')
+        # 节次
         self.sessionStart = detail_data.get('classSessions', '')
         self.sessionContinue = detail_data.get('continuingSession', '')
         self.timeDetail = []
@@ -82,10 +87,16 @@ class CourseDetail(BaseModel):
 
 class Course(BaseModel):
     def __init__(self, course_info, timetable, course_timeDetail_combine):
+
+        # 课程名称
         self.Name = course_info.get('courseName', '')
+        # 课程号
         self.Code = course_info.get('id', {}).get('coureNumber', '')
+        # 课程性质
         self.Property = course_info.get('coursePropertiesName', '')
+        # 教师
         self.Teacher = course_info.get('attendClassTeacher', '').split('*')[0]
+        # 学分
         self.Unit = course_info.get('unit', '')
 
         self.Detail = []
@@ -101,7 +112,7 @@ class Course(BaseModel):
             self.Week = time_and_place_list[0].get('weekDescription', '')
 
         else:
-            # 当 timeAndPlaceList 为空时，不处理课程详情
+            # 当 timeAndPlaceList 为空时，不处理课程详情(因为没有课程时间，一般是网课/实践课)
             self.Week = ''
 
 
@@ -139,12 +150,63 @@ class CourseList:
         return json.dumps([course.to_dict() for course in self.course_list], ensure_ascii=False, indent=4)
 
 
-class Exam:
+class Exam(BaseModel):
     '''
     考试信息，含通过和未通过课程
     '''
     def __init__(self, exam_info: str):
-        ...
+
+        # 课程名称中（英）
+        self.Name = exam_info.get('courseName', '')
+        self.Name_EN = exam_info.get('englishCourseName', '')
+        # 课程号
+        self.Code = exam_info['id'].get('courseNumber', '')
+        # 成绩（不及格）
+        self.Score = exam_info.get('courseScore', 0.0)
+        # Term
+        self.Term = exam_info.get('academicYearCode', '') + '-' + exam_info.get('termCode', '')
+        # Exam Date
+        self.Date = exam_info.get('examTime', '')
+
+
+class ExamList(BaseModel):
+    def __init__(self, source, is_file=False):
+        self.current_unpassed_exams = []  # 当前未通过的考试
+        self.past_unpassed_exams = []  # 曾经没通过的考试
+        self.__parse__(source, is_file)
+
+    def __parse__(self, source, is_file):
+        if not source:
+            raise ValueError('文本或文件路径不能为空！')
+
+        if is_file:
+            with open(source, 'r', encoding='UTF-8') as f:
+                source = f.read()
+
+        data = json.loads(source)
+
+        if 'lnList' not in data:
+            raise ValueError('未找到成绩信息！')
+
+        for ln in data['lnList']:
+            if ln['cjlx'] == '尚不及格':
+                for exam_info in ln['cjList']:
+                    exam = Exam(exam_info)
+                    self.current_unpassed_exams.append(exam)
+            elif ln['cjlx'] == '曾不及格':
+                for exam_info in ln['cjList']:
+                    exam = Exam(exam_info)
+                    self.past_unpassed_exams.append(exam)
+
+    def __iter__(self):
+        return iter(self.current_unpassed_exams + self.past_unpassed_exams)
+
+    def toString(self):
+        return json.dumps({
+            'current_unpassed_exams': [exam.to_dict() for exam in self.current_unpassed_exams],
+            'past_unpassed_exams': [exam.to_dict() for exam in self.past_unpassed_exams]
+        }, ensure_ascii=False, indent=4
+        )
 
 
 class CodeParser:

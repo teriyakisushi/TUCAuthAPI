@@ -1,0 +1,4 @@
+# Ignore E402
+
+[flake8]
+ignore = E402

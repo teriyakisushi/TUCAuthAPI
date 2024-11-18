@@ -82,6 +82,7 @@ python demo.py
 
 - [x] URP教务系统
 - [x] 解析课程表，详细看 `Update Log`
+- [ ] 获取成绩
 - [ ] 潜在的Captcha认证
 - [ ] PEExam系统
 - [ ] Backend support

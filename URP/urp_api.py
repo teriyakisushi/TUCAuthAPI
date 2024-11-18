@@ -130,7 +130,7 @@ class URP:
 
         try:
             res = auth_instance.requests.get(
-                'http://stu.j.tjcu.edu.cn/student/integratedQuery/scoreQuery/index',
+                'http://stu.j.tjcu.edu.cn/student/integratedQuery/scoreQuery/unpassedScores/index',
             )
             Tools.save_response_text(res.text, 'unpass_response.txt', './Response')
             await asyncio.sleep(0.1)

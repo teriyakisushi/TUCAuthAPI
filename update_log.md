@@ -1,3 +1,80 @@
+- **2024.11.18**:
+  - 将未通过课程的信息存储在`Exam`对象中，包含属性见 ⬇ 底部折叠标签
+  - `Exam`类成员含 `current_unpassed_exams` 和 `past_unpassed_exams`，分别存储当前未通过的课程和曾经未通过的课程
+  - 使用示例（请先用`urp_get_unpass_course()`获取未通过课程信息）
+
+```python
+from URP.parse import ExamList
+
+'''
+先确保你已经获取了未通过的考试信息(urp_get_unpass_course)，然后可打印其属性值
+'''
+
+MyUPExam = ExamList(
+    source='./Response/unpass_exam.json',
+    is_file=True
+)
+
+print("未通过的考试如下：")
+for ue in MyUPExam.current_unpassed_exams:
+    print(f"课程名称：{ue.Name}")
+    print(f"课程编号：{ue.Code}")
+    print(f"考试时间：{ue.Date}")
+    print(f"考试成绩：{ue.Score}")
+    print(f"学期：{ue.Term}")
+    print("-" * 30)
+
+print("曾经挂科的课程如下：")
+for ue in MyUPExam.past_unpassed_exams:
+    print(f"课程名称：{ue.Name}")
+    print(f"课程编号：{ue.Code}")
+    print(f"考试时间：{ue.Date}")
+    print(f"考试成绩：{ue.Score}")
+    print(f"学期：{ue.Term}")
+    print("-" * 30)
+```
+
+- 你可以使用`toString()`方法将对象转换为json格式的字符串，如`MyUPExam.toString()`，返回内容如下：
+
+```json
+{
+    "current_unpassed_exams": [
+        {
+            "Name": "沟槽的申金网课",
+            "Name_EN": "Online Course you ",
+            "Code": "114514",
+            "Score": 48.0,
+            "Term": "2022-2023-2",
+            "Date": "20230620"
+        }
+    ],
+    "past_unpassed_exams": [
+        {
+            "Name": "大学物理A",
+            "Name_EN": "College Physics A",
+            "Code": "1919810",
+            "Score": 59.0,
+            "Term": "2022-2023-2",
+            "Date": "20230621"
+        }
+    ]
+}
+```
+
+---
+Object Properties:
+
+| 考试属性 | 类型   | 说明     |
+| -------- | ------ | -------- |
+| Name     | String | 课程名称 |
+| Name_EN  | String | 英文名称 |
+| Code     | String | 课程代码 |
+| Score    | Float  | 考试成绩 |
+| Term     | String | 学期     |
+| Date     | String | 考试时间 |
+
+
+
 - **2024.11.4**:
   - New class: `Exam`, used to get exam information, including passed and unpassed exams
   - Remove `CourseList.to_dict()` and `Course.to_dict()`, this method now herited from `BaseModel` method
