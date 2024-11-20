@@ -270,3 +270,36 @@ class CodeParser:
             raise ValueError('未找到未通过考试的课程地址！')
 
         return code
+    
+    def urp_find_avatar_code(source: str, is_file: bool = False) -> str:
+        '''
+        获取用户头像地址
+        传入参数为文件路径时, is_file参数必须为True
+
+        Args:
+            source: 响应文本或响应文件路径
+
+        Returns:
+            str: 用户头像地址
+        '''
+        if not source:
+            raise ValueError('请求文本或文件路径不能为空！')
+
+        if is_file:
+            try:
+                with open(source, 'rb') as f:
+                    source = f.read()
+                    source = source.decode('utf-8')
+
+                # URL : like <img class="nav-user-photo" src="/main/queryStudent/img?xxxxxx>"
+                avatar_code = re.search(r'<img class="nav-user-photo" src="(.*?)"', source)
+                if avatar_code:
+                    avatar_code = avatar_code.group(1)
+                else:
+                    raise ValueError('未找到用户头像URL！')
+
+                return avatar_code
+
+            except Exception as e:
+                print(e)
+                raise ValueError('未找到用户头像URL！')

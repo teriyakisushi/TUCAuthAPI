@@ -48,3 +48,16 @@ class Tools:
                 source = f.read()
 
         ...
+
+    @staticmethod
+    def bytes_to_img(byte_data: bytes, img_path: str) -> None:
+        '''
+        将字节流数据保存为图片
+
+        Args:
+            byte_data: 图片的字节流数据
+            img_path: 图片保存的路径
+        '''
+        with open(img_path, 'wb') as f:
+            f.write(byte_data)
+            print(f'Save the image to {img_path} successfully!')

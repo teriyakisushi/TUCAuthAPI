@@ -150,3 +150,41 @@ class URP:
 
         except Exception as e:
             raise ValueError(f'Error: {e}')
+
+    @staticmethod
+    def urp_get_user_avatar(auth_instance: TJCUAuth, source: str = './Response/login_res.txt', is_file: bool = True) -> bytes:
+        '''
+        获取用户头像
+
+        Args:
+            source: 响应文本或响应文件路径
+            is_file: 是否为文件路径，默认为False
+
+        Returns:
+            bytes: 用户头像的Bytes流
+        '''
+        if not source:
+            raise ValueError('请求文本或文件路径不能为空！')
+
+        if is_file:
+            with open(source, 'rb') as f:
+                source = f.read()
+                source = source.decode('utf-8')
+
+        # URL eg.  <img class="nav-user-photo" src="/main/queryStudent/img?xxxxxx>"
+        avatar_url = re.search(r'<img class="nav-user-photo" src="(.*?)"', source)
+        if avatar_url:
+            avatar_url = avatar_url.group(1)
+        else:
+            raise ValueError('未找到用户头像URL！')
+
+        try:
+            res = auth_instance.requests.get(
+                url=f'http://stu.j.tjcu.edu.cn{avatar_url}',
+                headers={
+                    'User-Agent': auth_instance.UA,
+                }
+            )
+            return res.content
+        except Exception as e:
+            raise ValueError(f'Error: {e}')
