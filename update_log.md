@@ -1,3 +1,25 @@
+- **2024.11.20**:
+  - 新增方法: `urp_get_user_avatar()`, 用于获取用户头像(一般是你的照片)
+  - 为`Utils.Tools`类新增静态方法`bytes_to_image()`，用于将字节流转换为图片文件
+
+**获取用户头像示例：**
+
+```python
+MyURP = URP()
+
+# 获取用户头像，需要提供URP实例
+img_res = MyURP.urp_get_user_avatar(auth_instance)
+
+# 将字节流写入为图像文件
+Tools.bytes_to_img(
+  byte_data=img_res, 
+  img_path='./Response/avatar.jpg'
+  )
+
+print('Done') if os.path.exists('./Response/avatar.jpg')
+```
+
+
 - **2024.11.18**:
   - 将未通过课程的信息存储在`Exam`对象中，包含属性见 ⬇ 底部折叠标签
   - `Exam`类成员含 `current_unpassed_exams` 和 `past_unpassed_exams`，分别存储当前未通过的课程和曾经未通过的课程

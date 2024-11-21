@@ -8,7 +8,6 @@
 
 - [目录](#目录)
 - [📖项目简介](#项目简介)
-  - [⭐Features](#features)
 - [🚀安装依赖](#安装依赖)
 - [📚使用方法](#使用方法)
 - [🎦Demo](#demo)
@@ -21,9 +20,6 @@
 
 本 API 用于天商 **“统一身份认证”** 系统的快捷登录以获取目标服务的响应内容。
 
-### ⭐Features
-
-Update soon...
 
 ## 🚀安装依赖
 首先确保你的Python版本为`3.8+` ，在项目目录下执行以下命令：
@@ -35,7 +31,7 @@ playwright install
 
 ## 📚使用方法
 
-`auth_request.py` 提供了两种登录方法：
+`./Auth/auth_request.py` 提供了两种登录方法：
 - `login()`: 获取登录后返回的响应页面，适合静态资源
 - `power_login()`: 获取渲染完成后的登录页面内容，如 **URP教务系统**
 
@@ -48,7 +44,7 @@ playwright install
 **示例：**
 
 ```python
-from auth_request import TJCUAuth
+from Auth.auth_request import TJCUAuth
 
 # 创建登录实例
 URP = TJCUAuth(
@@ -84,9 +80,8 @@ python demo.py
 - [x] 解析课程表，详细看 `Update Log`
 - [ ] 获取成绩
 - [ ] 潜在的Captcha认证
-- [ ] PEExam系统
 - [ ] Backend support
-- [ ] More lang support
+- [ ] More lang support: `Go && Node.js`
 
 ## Update Log
 
