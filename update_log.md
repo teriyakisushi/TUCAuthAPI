@@ -1,3 +1,7 @@
+- **2024.11.22**:
+  - `URP.urp_api`新增方法: `urp_get_scheme_score()`, 用于获取培养方案成绩
+  - `URP.parse.CodeParser` 新增方法: `urp_find_scheme_code()`, 用于获取培养方案url的code
+
 - **2024.11.20**:
   - 新增方法: `urp_get_user_avatar()`, 用于获取用户头像(一般是你的照片)
   - 为`Utils.Tools`类新增静态方法`bytes_to_image()`，用于将字节流转换为图片文件
