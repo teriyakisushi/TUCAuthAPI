@@ -151,6 +151,18 @@ class URP:
         except Exception as e:
             raise ValueError(f'Error: {e}')
 
+    async def urp_get_scheme_score(self, auth_instance: TJCUAuth) -> str:
+        '''
+        获取培养方案成绩，返回json数据
+
+        Args:
+            auth_instance: Auth实例
+
+        Returns:
+            str: 培养方案成绩的json数据
+        '''
+        ...
+
     @staticmethod
     def urp_get_user_avatar(auth_instance: TJCUAuth, source: str = './Response/login_res.txt', is_file: bool = True) -> bytes:
         '''

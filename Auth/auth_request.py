@@ -4,7 +4,6 @@ import time
 import execjs
 import requests
 from loguru import logger
-from Utils.tools import Tools
 
 headers = {}
 data = {}
@@ -12,10 +11,14 @@ data = {}
 
 class TJCUAuth:
     def __init__(self, user: str, pwd: str, target_url: str) -> None:
-        '''
+        """
+        初始化TJCUAuth实例
+
         Args:
-            target_url: The service url that you want to access.
-        '''
+            user (str): 学号
+            pwd (str): 密码
+            target_url (str): 目标地址
+        """
         self.user = user
         self.pwd = pwd
         self.requests = requests.Session()
@@ -30,12 +33,12 @@ class TJCUAuth:
         self.encrypt = execjs.compile(open(encrypt_js_path, 'r', encoding='utf-8').read())
 
     def get_req(self, target_url: str) -> None:
-        '''
-        Arg:
+        """
+        请求一次目标地址，获取cookies（已弃用）
+
+        Args:
             target_url: 需要访问的服务地址
-        Return:
-            None
-        '''
+        """
         url = self.auth_url + '?service=' + target_url
         # by using session() method,  you can avoid adding cookies to the headers list.
         headers = {
@@ -56,6 +59,10 @@ class TJCUAuth:
             logger.error(f'Error: {e}')
 
     def get_salt(self) -> str:
+        """
+        获取salt和lt
+        """
+
         url = self.auth_url
         headers = {
             'User-Agent': self.UA,
@@ -79,13 +86,13 @@ class TJCUAuth:
             return 0, 0   # It can actually return None, the return value is just for debugging or logical judgment.
 
     def login(self, user: str = '', pwd: str = '') -> str:
-        '''
+        """
+        普通登录方法，返回登录成功后的页面信息
+
         Args:
             user: 学号
             pwd: 密码
-        Returns:
-            str: 登录成功返回的页面信息
-        '''
+        """
         global headers, data
         return_info = ''
 
@@ -134,16 +141,15 @@ class TJCUAuth:
         return return_info
 
     def power_login(self, user: str = '', pwd: str = '', target_url: str = '') -> str:
-        '''
-        获取渲染完成后的页面，可用在当前页面需要JavaScript渲染的情况
+        """
+        获取渲染完成后的页面，可用在当前页面需要JavaScript渲染的情况，
+        返回登录成功后的页面信息
 
         Args:
             user: 学号
             pwd: 密码
             target_url: 需要访问的服务地址
-        Returns:
-            str: 登录成功返回的页面信息
-        '''
+        """
         from playwright.sync_api import sync_playwright
 
         if not user and not pwd:
@@ -202,30 +208,9 @@ class TJCUAuth:
             logger.error(f'Error: {e}')
             return 'something error'
 
-    def schedule_provider(self):
-        if not self.login_status:
-            logger.error('请先登录！')
-            raise ValueError('请先登录！')
-
-        res = self.requests.get(
-            'http://stu.j.tjcu.edu.cn/student/courseSelect/thisSemesterCurriculum/index',
-        )
-        Tools.save_response_text(res.text, 'schedule_response.txt', './Response')
-        time.sleep(0.1)
-
-        plan_code = Tools.urp_find_semester_plancode('./Response/schedule_response.txt', is_file=True)
-
-        url = f'http://stu.j.tjcu.edu.cn/student/courseSelect/thisSemesterCurriculum/{plan_code}/ajaxStudentSchedule/curr/callback'
-
-        res = self.requests.get(
-            url=url,
-            headers={
-                'User-Agent': self.UA,
-                'Referer': 'http://stu.j.tjcu.edu.cn/student/courseSelect/thisSemesterCurriculum/index'
-            }
-        )
-        return res.text
-
-    def clean_cookies(self):
+    def clean_cookies(self) -> None:
+        """
+        清除cookies
+        """
         self.requests.cookies.clear()
         logger.success('Clean the cookies successfully!')
