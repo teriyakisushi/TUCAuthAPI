@@ -1,3 +1,9 @@
+- **2024.11.23**:
+  - 调整了一下项目结构，将`settings.py`移动到`Config`目录下
+  - `URP.parse`新增`SchemeExam`及其子类，用于解析培养方案的考试信息
+  - 原`Exam`类更名为`UPExam`，适用于其所有子类
+  - 计划：`settings.py` -> `config.json`，将配置文件改为json格式，方便读取和修改
+
 - **2024.11.22**:
   - `URP.urp_api`新增方法: `urp_get_scheme_score()`, 用于获取培养方案成绩
   - `URP.parse.CodeParser` 新增方法: `urp_find_scheme_code()`, 用于获取培养方案url的code

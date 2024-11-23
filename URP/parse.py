@@ -150,7 +150,7 @@ class CourseList:
         return json.dumps([course.to_dict() for course in self.course_list], ensure_ascii=False, indent=4)
 
 
-class Exam(BaseModel):
+class UPExam(BaseModel):
     '''
     考试信息，含通过和未通过课程
     '''
@@ -169,7 +169,7 @@ class Exam(BaseModel):
         self.Date = exam_info.get('examTime', '')
 
 
-class ExamList(BaseModel):
+class UPExamList(BaseModel):
     def __init__(self, source, is_file=False):
         self.current_unpassed_exams = []  # 当前未通过的考试
         self.past_unpassed_exams = []  # 曾经没通过的考试
@@ -191,11 +191,11 @@ class ExamList(BaseModel):
         for ln in data['lnList']:
             if ln['cjlx'] == '尚不及格':
                 for exam_info in ln['cjList']:
-                    exam = Exam(exam_info)
+                    exam = UPExam(exam_info)
                     self.current_unpassed_exams.append(exam)
             elif ln['cjlx'] == '曾不及格':
                 for exam_info in ln['cjList']:
-                    exam = Exam(exam_info)
+                    exam = UPExam(exam_info)
                     self.past_unpassed_exams.append(exam)
 
     def __iter__(self):
@@ -207,6 +207,15 @@ class ExamList(BaseModel):
             'past_unpassed_exams': [exam.to_dict() for exam in self.past_unpassed_exams]
         }, ensure_ascii=False, indent=4
         )
+
+
+class SchemeExam(BaseModel):
+    def __init__(self, exam_info: str):
+        ...
+
+
+class SchemeExamList(BaseModel):
+    ...
 
 
 class CodeParser:

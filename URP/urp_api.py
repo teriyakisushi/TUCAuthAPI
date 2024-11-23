@@ -11,16 +11,14 @@ class URP:
 
     @staticmethod
     def urp_get_name(source: str, is_file: bool = False) -> str:
-        '''
-        获取登录后的URP教务系统的用户姓名
+        """
+        获取登录后的URP教务系统的用户姓名, 返回用户姓名
         传入参数为文件路径时，is_file参数必须为True
 
         Args:
             source: 响应文本或响应文件路径
-
-        Returns:
-            str: 用户姓名
-        '''
+            is_file: 是否为文件路径，默认为False
+        """
         user_name = ''
 
         if not source:
@@ -40,16 +38,14 @@ class URP:
 
     @staticmethod
     def urp_get_gpa(source: str, is_file: bool = False) -> float:
-        '''
-        获取登录后的URP教务系统的用户绩点
+        """
+        获取登录后的URP教务系统的用户绩点,返回用户的绩点
         传入参数为文件路径时，is_file参数必须为True
 
         Args:
             source: 响应文本或响应文件路径
-
-        Returns:
-            float: 用户绩点
-        '''
+            is_file: 是否为文件路径，默认为False
+        """
         user_gpa = 0.0
 
         if not source:
@@ -68,9 +64,12 @@ class URP:
         return user_gpa
 
     async def urp_get_courseSelect(self, auth_instance: TJCUAuth) -> str:
-        '''
-        获取本学期课程信息，返回json数据
-        '''
+        """
+        获取本学期课程信息，返回原始json数据（未解析）
+
+        Args:
+            auth_instance(Auth): Auth实例
+        """
         if not auth_instance.login_status:
             raise ValueError('请先登录！')
 
@@ -94,15 +93,12 @@ class URP:
         return res.text
 
     async def urp_get_courseTime(self, auth_instance: TJCUAuth) -> str:
-        '''
-        获取课程时间，返回json数据
+        """
+        获取课程时间，返回原始json数据（未解析）
 
         Args:
             auth_instance: Auth实例
-
-        Returns:
-            str: 课程时间的json数据
-        '''
+        """
         if not auth_instance.login_status:
             raise ValueError('请先登录！')
 
@@ -116,15 +112,12 @@ class URP:
             raise ValueError(f'Error: {e}')
 
     async def urp_get_unpass_course(self, auth_instance: TJCUAuth) -> str:
-        '''
-        获取挂科的课程信息，返回json数据
+        """
+        获取挂科的课程信息，返回原始json数据（未解析）
 
         Args:
-            auth_instance: Auth实例
-
-        Returns:
-            str: 未通过的课程信息的json数据
-        '''
+            auth_instance(Auth): Auth实例
+        """
         if not auth_instance.login_status:
             raise ValueError('请先登录！')
 
@@ -152,16 +145,37 @@ class URP:
             raise ValueError(f'Error: {e}')
 
     async def urp_get_scheme_score(self, auth_instance: TJCUAuth) -> str:
-        '''
-        获取培养方案成绩，返回json数据
+        """
+        获取培养方案成绩，返回原始json数据（未解析）
 
         Args:
-            auth_instance: Auth实例
+            auth_instance(Auth): Auth实例
+        """
+        if not auth_instance.login_status:
+            raise ValueError('请先登录！')
 
-        Returns:
-            str: 培养方案成绩的json数据
-        '''
-        ...
+        try:
+            res = auth_instance.requests.get(
+                'http://stu.j.tjcu.edu.cn/student/integratedQuery/scoreQuery/schemeScores/index',
+            )
+            Tools.save_response_text(res.text, 'scheme_response.txt', './Response')
+            await asyncio.sleep(0.1)
+
+            code = CodeParser.urp_find_schemescore_code('./Response/scheme_response.txt', is_file=True)
+
+            url = f'http://stu.j.tjcu.edu.cn/student/integratedQuery/scoreQuery/{code}/schemeScores/callback'
+
+            res = auth_instance.requests.get(
+                url=url,
+                headers={
+                    'User-Agent': auth_instance.UA,
+                    'Referer': 'http://stu.j.tjcu.edu.cn/student/integratedQuery/scoreQuery/index'
+                }
+            )
+            return res.text
+
+        except Exception as e:
+            raise ValueError(f'Error: {e}')
 
     @staticmethod
     def urp_get_user_avatar(auth_instance: TJCUAuth, source: str = './Response/login_res.txt', is_file: bool = True) -> bytes:
