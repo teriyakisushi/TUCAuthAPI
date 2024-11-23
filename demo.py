@@ -1,7 +1,7 @@
 from Auth.auth_request import TJCUAuth
 from Utils.tools import Tools
 from URP.urp_api import URP
-from settings import user, pwd
+from Config.settings import user, pwd
 
 
 def get_my_info(Instance: TJCUAuth):

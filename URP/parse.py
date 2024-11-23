@@ -1,6 +1,6 @@
 import re
 import json
-from settings import course_timeDetail_combine
+from Config.settings import course_timeDetail_combine
 
 
 class BaseModel:
