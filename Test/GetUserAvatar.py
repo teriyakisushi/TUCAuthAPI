@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from Auth.auth_request import TJCUAuth
 from Utils.tools import Tools
 from URP.urp_api import URP
-from settings import user, pwd
+from Config.settings import user, pwd
 
 
 async def test_interface(Instance: TJCUAuth):
