@@ -68,7 +68,7 @@ print(res)
 
 本仓库提供了一个简单的Demo程序，演示了如何利用本API获取天商URP教务系统的姓名和绩点信息。
 
-修改`settings.py`的`user`和`pwd`为你的学号和密码，然后使用如下命令运行：
+修改`Config/settings.py`的`user`和`pwd`为你的学号和密码，然后使用如下命令运行：
 
 ```shell
 python demo.py
