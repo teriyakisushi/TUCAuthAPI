@@ -13,8 +13,8 @@ def get_my_info(Instance: TJCUAuth):
     Tools.save_response_text(res, res_file, './Response')
 
     # 读取响应文本，获取用户姓名和绩点
-    name = URP.urp_get_name(res_file, is_file=True)
-    gpa = URP.urp_get_gpa(res_file, is_file=True)
+    name = URP.urp_get_name('./Response/login_res.txt', is_file=True)
+    gpa = URP.urp_get_gpa('./Response/login_res.txt', is_file=True)
 
     print(f'请问是{name}同学吗?\n你的绩点是{gpa}哦！')
 
