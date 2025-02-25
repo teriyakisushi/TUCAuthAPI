@@ -5,11 +5,16 @@
 </h2>
 
 
+
 <div align="center">
   <img src="https://img.shields.io/badge/Dev%20Env-Windows%2010-00adef?style=for-the-badge&logo=windows&logoColor=white" alt="dev environment"/>
   <img src="https://img.shields.io/badge/Python-3.10-FFD43B?style=for-the-badge&logo=python&logoColor=blue" alt="python version"/>
   <img src="https://img.shields.io/badge/Playwright-1.48.0-57e8e7?style=for-the-badge&logo=playwright&logoColor=white" alt="playwright version"/>
 </div>
+
+## 
+
+> 本项目已迁移至[TUCAPI](https://github.com/teriyakisushi/TUCAPI)
 
 ## 目录
 
